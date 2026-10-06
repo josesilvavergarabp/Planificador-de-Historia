@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planificador Didáctico Historia</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- docx.js for Word Export -->
+    <script src="https://unpkg.com/docx@8.2.3/build/index.umd.js"></script>
+    <!-- FileSaver.js for file download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <!-- Google Fonts: Arial / Sans-serif fallback -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Inter', Arial, sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        textarea:focus, input:focus, select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+        }
+        .text-justify { text-align: justify; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- HEADER DE LA APLICACIÓN -->
+    <header class="bg-indigo-900 text-white shadow-md border-b border-indigo-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="p-2.5 bg-amber-500 rounded-xl text-indigo-950 font-bold shadow-inner">
+                    <i class="fa-solid fa-book-open-reader text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-extrabold tracking-tight flex items-center gap-2">
+                        Planificador Didáctico Historia
+                        <span class="text-xs bg-amber-400 text-indigo-950 font-semibold px-2 py-0.5 rounded-full uppercase tracking-wider">1° a 8° Básico</span>
+                    </h1>
+                    <p class="text-xs text-indigo-200">Planes Didácticos para Aula Regular y Comunidades Multigrado • Historia, Geografía y Cs. Sociales</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2 bg-indigo-800/90 border border-indigo-700/60 px-3 py-1.5 rounded-lg text-xs">
+                <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                <span class="text-indigo-100 font-medium">Bases Curriculares Vigentes</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- PANEL IZQUIERDO: CONFIGURACIÓN Y SELECCIÓN DE OAs (5 Cols) -->
+        <section class="lg:col-span-5 space-y-5">
+            
+            <!-- DATOS INSTITUCIONALES Y CURSO -->
+            <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 space-y-4">
+                <h2 class="text-base font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-2">
+                    <span class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold">1</span>
+                    Identificación y Encabezado
+                </h2>
+                
+                <div class="space-y-3 text-xs">
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Nombre del Establecimiento Educacional</label>
+                        <input type="text" id="schoolName" placeholder="Ej: Escuela República de Chile" class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-slate-50 focus:bg-white transition">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Profesor(a) / Docente de Asignatura</label>
+                        <input type="text" id="teacherName" placeholder="Ej: Prof. José Silva Vergara" class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-slate-50 focus:bg-white transition">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-2.5 pt-1">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Curso Nivel 1</label>
+                            <select id="course1" onchange="handleCourseChange()" class="w-full px-2.5 py-2 border border-slate-300 rounded-lg bg-white font-medium text-slate-800">
+                                <option value="">-- Seleccionar --</option>
+                                <option value="1">1° Año Básico</option>
+                                <option value="2">2° Año Básico</option>
+                                <option value="3">3° Año Básico</option>
+                                <option value="4">4° Año Básico</option>
+                                <option value="5">5° Año Básico</option>
+                                <option value="6">6° Año Básico</option>
+                                <option value="7">7° Año Básico</option>
+                                <option value="8">8° Año Básico</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Curso Nivel 2 (Opcional)</label>
+                            <select id="course2" onchange="handleCourseChange()" class="w-full px-2.5 py-2 border border-slate-300 rounded-lg bg-white font-medium text-slate-800">
+                                <option value="">-- Ninguno (Unicombinación) --</option>
+                                <option value="1">1° Año Básico</option>
+                                <option value="2">2° Año Básico</option>
+                                <option value="3">3° Año Básico</option>
+                                <option value="4">4° Año Básico</option>
+                                <option value="5">5° Año Básico</option>
+                                <option value="6">6° Año Básico</option>
+                                <option value="7">7° Año Básico</option>
+                                <option value="8">8° Año Básico</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 pt-1">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Duración (min)</label>
+                            <input type="number" id="classDuration" value="90" min="45" max="180" step="15" class="w-full px-2.5 py-2 border border-slate-300 rounded-lg text-center font-bold text-slate-800">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="block font-semibold text-slate-700 mb-1">Fecha de Aplicación</label>
+                            <input type="date" id="classDate" class="w-full px-2.5 py-2 border border-slate-300 rounded-lg text-slate-700">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-slate-700 mb-1">Unidad Didáctica / Eje Temático</label>
+                        <input type="text" id="unitTitle" placeholder="Ej: Unidad 1: Formación Histórica e Identidad Territorio" class="w-full px-3 py-2 border border-slate-300 rounded-lg bg-slate-50 focus:bg-white">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SELECCIÓN DE OBJETIVOS DE APRENDIZAJE -->
+            <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 space-y-3">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                    <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs font-bold">2</span>
+                        Objetivos de Aprendizaje (OA)
+                    </h2>
+                    <span id="selectedCountBadge" class="text-[11px] font-bold bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full">0 selec.</span>
+                </div>
+
+                <div id="multigradeNotice" class="hidden p-3 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-900 space-y-1">
+                    <p class="font-bold flex items-center gap-1.5 text-amber-800">
+                        <i class="fa-solid fa-users text-amber-600"></i> Comunidad de Aprendizaje Integrada
+                    </p>
+                    <p class="text-[11px] text-amber-800 leading-relaxed">
+                        Se articularán ambos niveles dentro de una **misma secuencia didáctica interactiva**, promoviendo el trabajo en parejas/equipos mixtos y tutoría de pares.
+                    </p>
+                </div>
+
+                <!-- Filtros de Eje -->
+                <div class="flex space-x-1 bg-slate-100 p-1 rounded-lg text-xs font-semibold">
+                    <button onclick="filterOaByAxis('ALL')" class="axis-tab active-tab flex-1 py-1 px-2 rounded-md transition text-center" data-axis="ALL">Todos</button>
+                    <button onclick="filterOaByAxis('Historia')" class="axis-tab flex-1 py-1 px-2 rounded-md transition text-center text-slate-600" data-axis="Historia">Historia</button>
+                    <button onclick="filterOaByAxis('Geografía')" class="axis-tab flex-1 py-1 px-2 rounded-md transition text-center text-slate-600" data-axis="Geografía">Geografía</button>
+                    <button onclick="filterOaByAxis('Formación Ciudadana')" class="axis-tab flex-1 py-1 px-2 rounded-md transition text-center text-slate-600" data-axis="Formación Ciudadana">Ciudadanía</button>
+                </div>
+
+                <!-- Lista de OAs -->
+                <div id="oaListContainer" class="max-h-80 overflow-y-auto custom-scrollbar space-y-2 pr-1">
+                    <div class="text-center py-8 text-slate-400 text-xs italic">
+                        Selecciona uno o dos cursos para desplegar los Objetivos de Aprendizaje.
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTÓN GENERAR PLAN -->
+            <button onclick="generateDetailedPlan()" class="w-full py-3.5 px-4 bg-gradient-to-r from-indigo-600 to-indigo-800 hover:from-indigo-700 hover:to-indigo-900 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition transform active:scale-[0.99] flex items-center justify-center gap-2.5 text-sm">
+                <i class="fa-solid fa-wand-magic-sparkles text-amber-300 text-base"></i>
+                Generar Planificación Didáctica Completa
+            </button>
+        </section>
+
+        <!-- PANEL DERECHO: VISTA PREVIA Y EDITOR (7 Cols) -->
+        <section class="lg:col-span-7">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col h-full">
+                
+                <!-- Barra Superior con exportación -->
+                <div class="bg-slate-800 text-white px-5 py-3.5 flex flex-wrap justify-between items-center gap-3">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-file-lines text-amber-400"></i>
+                        <h3 class="font-bold text-sm sm:text-base">Documento Didáctico de Clase (Editable)</h3>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button onclick="exportToWordDocx()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg shadow transition flex items-center gap-2">
+                            <i class="fa-solid fa-file-word text-sm"></i>
+                            Exportar a Word (.docx Carta)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ÁREA DE CONTENIDO EDITABLE -->
+                <div id="planContentArea" class="p-6 overflow-y-auto custom-scrollbar flex-grow space-y-6 text-xs text-slate-800">
+                    
+                    <!-- Estado Inicial (Vacío) -->
+                    <div id="placeholderState" class="text-center py-20 px-4 space-y-3">
+                        <div class="w-16 h-16 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center mx-auto">
+                            <i class="fa-solid fa-scroll text-3xl"></i>
+                        </div>
+                        <h3 class="text-base font-bold text-slate-700">Sin Planificación Generada</h3>
+                        <p class="text-slate-400 max-w-sm mx-auto">Selecciona los datos institucionales, escoge los Objetivos de Aprendizaje y presiona el botón para elaborar la propuesta didáctica.</p>
+                    </div>
+
+                    <!-- Estructura del Documento Generado -->
+                    <div id="actualPlanForm" class="hidden space-y-6">
+                        
+                        <!-- Encabezado Resumen Oficial -->
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            <div>
+                                <span class="block font-bold text-slate-400 uppercase text-[10px]">Establecimiento</span>
+                                <span id="prevSchool" class="font-semibold text-slate-900">-</span>
+                            </div>
+                            <div>
+                                <span class="block font-bold text-slate-400 uppercase text-[10px]">Docente</span>
+                                <span id="prevTeacher" class="font-semibold text-slate-900">-</span>
+                            </div>
+                            <div>
+                                <span class="block font-bold text-slate-400 uppercase text-[10px]">Curso(s) / Nivel</span>
+                                <span id="prevCourses" class="font-bold text-indigo-700">-</span>
+                            </div>
+                            <div>
+                                <span class="block font-bold text-slate-400 uppercase text-[10px]">Fecha</span>
+                                <span id="prevDate" class="font-semibold text-slate-900">-</span>
+                            </div>
+                            <div>
+                                <span class="block font-bold text-slate-400 uppercase text-[10px]">Duración</span>
+                                <span id="prevDuration" class="font-semibold text-slate-900">- min</span>
+                            </div>
+                            <div>
+                                <span class="block font-bold text-slate-400 uppercase text-[10px]">Unidad / Eje</span>
+                                <span id="prevUnit" class="font-semibold text-slate-900">-</span>
+                            </div>
+                        </div>
+
+                        <!-- OAs Seleccionados -->
+                        <div class="border-l-4 border-indigo-600 pl-3.5 py-1 space-y-1">
+                            <h4 class="font-extrabold text-indigo-900 uppercase tracking-wider text-[11px]">Objetivos de Aprendizaje Seleccionados</h4>
+                            <div id="prevOaList" class="space-y-1.5 text-slate-700"></div>
+                        </div>
+
+                        <!-- INDICADORES DE EVALUACIÓN OFICIALES ASOCIADOS -->
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                            <h4 class="font-extrabold text-slate-900 uppercase tracking-wider text-[11px] flex items-center gap-2">
+                                <i class="fa-solid fa-list-check text-indigo-600"></i> Indicadores de Evaluación Correspondientes
+                            </h4>
+                            <div id="prevIndicatorsList" class="space-y-1 text-slate-700 leading-relaxed pl-2 border-l-2 border-indigo-300"></div>
+                        </div>
+
+                        <!-- Objetivo Sintetizado de Clase -->
+                        <div class="bg-indigo-50/70 border border-indigo-200 rounded-xl p-4 space-y-1.5">
+                            <label class="font-extrabold text-indigo-900 uppercase tracking-wider text-[11px] flex justify-between items-center">
+                                <span><i class="fa-solid fa-bullseye text-indigo-600 mr-1.5"></i> Objetivo Sintetizado de la Clase</span>
+                                <span class="text-[10px] text-indigo-500 font-medium italic">Editable</span>
+                            </label>
+                            <textarea id="targetObjectiveInput" rows="3" class="w-full p-3 bg-white border border-indigo-200 rounded-lg font-semibold text-slate-800 leading-relaxed focus:ring-2 focus:ring-indigo-500 text-justify"></textarea>
+                        </div>
+
+                        <!-- Momentos Didácticos de la Clase -->
+                        <div class="space-y-5">
+                            <h4 class="font-extrabold text-slate-900 text-sm border-b pb-1.5 flex justify-between items-center">
+                                <span><i class="fa-solid fa-layer-group text-indigo-600 mr-2"></i> Desarrollo Didáctico (Comunidad de Aprendizaje)</span>
+                                <span class="text-[10px] text-slate-400 font-normal">Sincronizado con tiempo total</span>
+                            </h4>
+
+                            <!-- MOMENTO INICIO -->
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                                <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                                    <span class="font-extrabold text-amber-800 uppercase tracking-wide bg-amber-100 px-2.5 py-0.5 rounded text-[11px]">Momento 1: Inicio</span>
+                                    <span id="timeInicioLabel" class="font-bold text-slate-500 text-[11px]">15 min</span>
+                                </div>
+                                <textarea id="inicioContentInput" rows="6" class="w-full p-3 bg-white border border-slate-200 rounded-lg leading-relaxed text-slate-700 focus:ring-2 focus:ring-indigo-500 font-normal text-justify"></textarea>
+                            </div>
+
+                            <!-- MOMENTO DESARROLLO (ACTIVIDAD DETALLADA CON FUENTES) -->
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                                <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                                    <span class="font-extrabold text-indigo-800 uppercase tracking-wide bg-indigo-100 px-2.5 py-0.5 rounded text-[11px]">Momento 2: Desarrollo e Indagación Activa</span>
+                                    <span id="timeDesarrolloLabel" class="font-bold text-slate-500 text-[11px]">60 min</span>
+                                </div>
+                                <p class="text-[10px] text-indigo-600 font-medium">Incluye la actividad unificada, la fuente histórica o geográfica completa y la guía de preguntas:</p>
+                                <textarea id="desarrolloContentInput" rows="18" class="w-full p-3 bg-white border border-slate-200 rounded-lg leading-relaxed text-slate-800 focus:ring-2 focus:ring-indigo-500 font-normal text-justify text-[11px]"></textarea>
+                            </div>
+
+                            <!-- MOMENTO CIERRE -->
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+                                <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                                    <span class="font-extrabold text-emerald-800 uppercase tracking-wide bg-emerald-100 px-2.5 py-0.5 rounded text-[11px]">Momento 3: Cierre y Metacognición</span>
+                                    <span id="timeCierreLabel" class="font-bold text-slate-500 text-[11px]">15 min</span>
+                                </div>
+                                <textarea id="cierreContentInput" rows="5" class="w-full p-3 bg-white border border-slate-200 rounded-lg leading-relaxed text-slate-700 focus:ring-2 focus:ring-indigo-500 font-normal text-justify"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- EVALUACIÓN E INSTRUMENTO EN TABLA -->
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-4">
+                            <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-slate-200 pb-2">
+                                <h4 class="font-bold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-2">
+                                    <i class="fa-solid fa-clipboard-check text-indigo-600"></i> Evaluación Formativa y Rúbrica / Tabla de Cotejo
+                                </h4>
+                                <!-- BOTÓN GENERAR EJEMPLO DE EVALUACIÓN EN NUEVA PESTAÑA -->
+                                <button onclick="openEvaluationSampleWindow()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[11px] rounded-lg shadow-sm transition flex items-center gap-1.5">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                    Generar Ejemplo de Evaluación (Pest. Nueva)
+                                </button>
+                            </div>
+
+                            <div class="space-y-3">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block font-semibold text-slate-600 mb-1">Tipo e Instrumento</label>
+                                        <input type="text" id="evalTypeInput" class="w-full p-2 bg-white border border-slate-200 rounded-lg font-medium text-slate-800">
+                                    </div>
+                                    <div>
+                                        <label class="block font-semibold text-slate-600 mb-1">Indicador Principal de la Clase</label>
+                                        <input type="text" id="evalIndicatorInput" class="w-full p-2 bg-white border border-slate-200 rounded-lg font-medium text-slate-800">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block font-semibold text-slate-600 mb-1">Rúbrica / Pauta de Evaluación (Estructura de Tabla)</label>
+                                    <textarea id="evalRubricInput" rows="8" class="w-full p-3 bg-white border border-slate-200 rounded-lg text-[11px] text-slate-800 focus:ring-2 focus:ring-indigo-500 font-mono text-justify"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AJUSTES DUA -->
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-3">
+                            <h4 class="font-bold text-slate-900 text-xs uppercase tracking-wider flex items-center gap-2 border-b border-slate-200 pb-2">
+                                <i class="fa-solid fa-universal-access text-indigo-600"></i> Diversificación de la Enseñanza (Principios DUA)
+                            </h4>
+                            
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="block font-bold text-indigo-900 text-[11px]">1. Múltiples formas de Representación (Percepción y Comprensión)</label>
+                                    <textarea id="duaRepresentationInput" rows="3" class="w-full p-2.5 mt-1 bg-white border border-slate-200 rounded-lg text-slate-700 text-justify"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-emerald-900 text-[11px]">2. Múltiples formas de Acción y Expresión (Ejecución)</label>
+                                    <textarea id="duaActionInput" rows="3" class="w-full p-2.5 mt-1 bg-white border border-slate-200 rounded-lg text-slate-700 text-justify"></textarea>
+                                </div>
+                                <div>
+                                    <label class="block font-bold text-amber-900 text-[11px]">3. Múltiples formas de Compromiso (Motivación e Interés)</label>
+                                    <textarea id="duaEngagementInput" rows="3" class="w-full p-2.5 mt-1 bg-white border border-slate-200 rounded-lg text-slate-700 text-justify"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- PIE DE PÁGINA EN PANEL -->
+                <div class="bg-slate-100 border-t border-slate-200 px-5 py-2.5 text-center text-[11px] text-slate-500 font-semibold">
+                    Herramienta desarrollada por el profesor José Silva Vergara
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER GENERAL DE LA APP -->
+    <footer class="bg-slate-900 text-slate-400 py-4 px-4 text-center text-xs mt-auto border-t border-slate-800">
+        <p class="font-medium text-slate-300">Herramienta desarrollada por el profesor José Silva Vergara</p>
+        <p class="text-[11px] text-slate-500 mt-0.5">Diseño para Planificación Didáctica y Educación Comunitaria Multigrado • Chile</p>
+    </footer>
+
+    <!-- LÓGICA EN JAVASCRIPT -->
+    <script>
+        // BANCO CON OBJETIVOS DE APRENDIZAJE E INDICADORES OFICIALES
+        const MINEDUC_OA_DATABASE = {
+            1: [
+                { id: "OA1_1", axis: "Historia", code: "OA 1", text: "Nombrar el día, el mes, los años y la hora de un evento en la vida cotidiana usando nociones temporales.", indicators: ["Secuencia eventos personales ordenándolos cronológicamente.", "Identifica días de la semana y meses en calendarios escolares."] },
+                { id: "OA1_2", axis: "Historia", code: "OA 2", text: "Secuenciar acontecimientos de la vida cotidiana, personal y familiar.", indicators: ["Utiliza términos temporales como antes, ahora y después.", "Distingue actividades diurnas y nocturnas en su comunidad."] },
+                { id: "OA1_8", axis: "Geografía", code: "OA 8", text: "Reconocer que el mapa de Chile, el globo terráqueo y los planos son formas de representar lugares.", indicators: ["Identifica a Chile en planos, mapas gráficos y el globo terráqueo.", "Asocia símbolos sencillos con elementos reales del entorno."] },
+                { id: "OA1_13", axis: "Formación Ciudadana", code: "OA 13", text: "Demostrar actitudes de respeto en la clase, la escuela y la comunidad en su vida diaria.", indicators: ["Aplica normas básicas de convivencia y saludo afectuoso.", "Escucha en silencio y respeta los turnos para hablar."] }
+            ],
+            2: [
+                { id: "OA2_1", axis: "Historia", code: "OA 1", text: "Describir los modos de vida de los pueblos originarios que habitaban en el territorio chileno precolombino.", indicators: ["Compara la vivienda y alimentación de pueblos nómadas y sedentarios.", "Diferencia herramientas e indumentarias tradicionales."] },
+                { id: "OA2_6", axis: "Geografía", code: "OA 6", text: "Leer y comunicar información geográfica mediante el uso de planos sencillos y simbología.", indicators: ["Usa la simbología básica para orientarse dentro de una sala o escuela.", "Traza rutas sencillas considerando puntos de referencia."] },
+                { id: "OA2_7", axis: "Geografía", code: "OA 7", text: "Ubicar Chile, su capital, sus regiones y países limítrofes en un mapa del continente americano.", indicators: ["Localiza a Chile y Santiago en mapas Político-Administrativos.", "Nombra los países limítrofes (Perú, Bolivia y Argentina)."] },
+                { id: "OA2_14", axis: "Formación Ciudadana", code: "OA 14", text: "Reconocer que los niños tienen derechos que les garantizan un desarrollo armónico e integral.", indicators: ["Menciona sus derechos fundamentales (educación, salud, juego).", "Identifica situaciones en que se protegen o vulneran sus derechos."] }
+            ],
+            3: [
+                { id: "OA3_1", axis: "Historia", code: "OA 1", text: "Reconocer aspectos centrales de la civilización griega de la Antigüedad y su legado actual.", indicators: ["Ubica en un mapa el mar Egeo y el espacio geográfico griego.", "Ejemplifica manifestaciones de la democracia ateniense y el arte."] },
+                { id: "OA3_3", axis: "Historia", code: "OA 3", text: "Reconocer aspectos centrales de la civilización romana de la Antigüedad y la vida cotidiana.", indicators: ["Describe la vida en la ciudad de Roma y sus espacios públicos.", "Identifica el latín y las leyes como herencias culturales."] },
+                { id: "OA3_7", axis: "Geografía", code: "OA 7", text: "Distinguir hemisferios, círculo del Ecuador, trópicos y polos en globos terráqueos y mapas.", indicators: ["Localiza las líneas imaginarias de la Tierra en un planisferio.", "Identifica en qué hemisferios se ubica el continente americano."] },
+                { id: "OA3_11", axis: "Formación Ciudadana", code: "OA 11", text: "Asumir sus deberes y responsabilidades en la vida escolar, familiar y comunitaria.", indicators: ["Cumple puntualmente con sus tareas escolares y compromisos.", "Mantiene limpio y ordenado su espacio de aprendizaje."] }
+            ],
+            4: [
+                { id: "OA4_1", axis: "Historia", code: "OA 1", text: "Describir la civilización maya, considerando ubicación geográfica, organización social y cultura.", indicators: ["Localiza la península de Yucatán en el mapa mesoamericano.", "Explica la estructura social jerárquica de las ciudades-estado mayas."] },
+                { id: "OA4_2", axis: "Historia", code: "OA 2", text: "Describir la civilización azteca, su ubicación, sociedad, economía y avances tecnológicos.", indicators: ["Caracteriza la ciudad de Tenochtitlan y el sistema de chinampas.", "Describe el intercambio comercial en el mercado azteca."] },
+                { id: "OA4_3", axis: "Historia", code: "OA 3", text: "Describir la civilización inca, considerando su imperio, red vial, economía y religión.", indicators: ["Explica la función del Qhapaq Ñan o Camino del Inca.", "Describe el cultivo en terrazas y la administración del Tawantinsuyu."] },
+                { id: "OA4_8", axis: "Geografía", code: "OA 8", text: "Diferenciar los grandes paisajes de América considerando climas, relieve y vegetación.", indicators: ["Compara paisajes selváticos, desérticos y templados del continente.", "Distingue cómo el ser humano se adapta a cada paisaje americano."] }
+            ],
+            5: [
+                { id: "OA5_1", axis: "Historia", code: "OA 1", text: "Explicar los viajes de descubrimiento de Cristóbal Colón y la llegada de europeos a América.", indicators: ["Infiere las causas del comercio europeo con Oriente.", "Analiza las dificultades de las rutas de navegación transatlánticas."] },
+                { id: "OA5_2", axis: "Historia", code: "OA 2", text: "Describir el proceso de conquista de América y de Chile, identificando sus principales actores.", indicators: ["Describe las expediciones de Diego de Almagro y Pedro de Valdivia.", "Compara visiones europeas e indígenas sobre el proceso de conquista."] },
+                { id: "OA5_9", axis: "Geografía", code: "OA 9", text: "Caracterizar las grandes zonas naturales de Chile y sus ambientes geográficos clave.", indicators: ["Identifica los rasgos climáticos del Norte Grande, Chico, Centro, Sur y Austral.", "Explica los riesgos naturales presentes en cada zona natural."] },
+                { id: "OA5_13", axis: "Formación Ciudadana", code: "OA 13", text: "Reconocer que la Constitución Política garantiza los derechos fundamentales en Chile.", indicators: ["Fundamenta la importancia de contar con una Carta Magna.", "Ejemplifica derechos de igualdad ante la ley y libertad personal."] }
+            ],
+            6: [
+                { id: "OA6_1", axis: "Historia", code: "OA 1", text: "Explicar el proceso de Independencia de Chile y la conformación de la República.", indicators: ["Distingue las etapas de Patria Vieja, Reconquista y Patria Nueva.", "Reconoce los factores externos e internos que precipitaron el movimiento independista."] },
+                { id: "OA6_3", axis: "Historia", code: "OA 3", text: "Analizar el proceso de organización de la República en Chile durante el siglo XIX.", indicators: ["Explica el ensayo constitucional y la Constitución de 1833.", "Evalúa el aporte de figuras claves como Diego Portales."] },
+                { id: "OA6_11", axis: "Geografía", code: "OA 11", text: "Caracterizar la geografía económica de Chile y la gestión sostenible de sus recursos.", indicators: ["Identifica recursos renovables y no renovables en las regiones del país.", "Propone medidas de cuidado ambiental comunitarias."] },
+                { id: "OA6_15", axis: "Formación Ciudadana", code: "OA 15", text: "Explicar el funcionamiento del sistema democrático en Chile, la división de poderes y la ciudadanía.", indicators: ["Identifica las funciones de los poderes Ejecutivo, Legislativo y Judicial.", "Explica los mecanismos de elección popular mediante voto universal."] }
+            ],
+            7: [
+                { id: "OA7_1", axis: "Historia", code: "OA 1", text: "Explicar el proceso de hominización y las transformaciones del Neolítico.", indicators: ["Distingue las etapas de evolución biológica y cultural de los homínidos.", "Explica la importancia de la agricultura y el sedentarismo en la revolución neolítica."] },
+                { id: "OA7_3", axis: "Historia", code: "OA 3", text: "Caracterizar el surgimiento de las primeras civilizaciones urbanas (Mesopotamia, Egipto).", indicators: ["Asocia la cercanía a grandes ríos con el surgimiento de las ciudades.", "Analiza la invención de la escritura como hito del inicio de la Historia."] },
+                { id: "OA7_12", axis: "Geografía", code: "OA 12", text: "Analizar cómo los factores geográficos influyen en la organización de los espacios urbanos y rurales.", indicators: ["Compara las funciones económicas del campo y la ciudad.", "Analiza las problemáticas socioambientales de las urbes modernas."] },
+                { id: "OA7_16", axis: "Formación Ciudadana", code: "OA 16", text: "Reconocer el valor de la diversidad cultural y el respeto universal por los Derechos Humanos.", indicators: ["Argumenta por qué la Declaración de Derechos Humanos es universal e inalienable.", "Evalúa acciones para erradicar toda forma de discriminación."] }
+            ],
+            8: [
+                { id: "OA8_1", axis: "Historia", code: "OA 1", text: "Analizar el Renacimiento, el Humanismo y las transformaciones culturales de la Edad Moderna.", indicators: ["Caracteriza la visión antropocéntrica del Humanismo renacentista.", "Evalúa el impacto de la imprenta en la difusión de las ideas científicas."] },
+                { id: "OA8_3", axis: "Historia", code: "OA 3", text: "Caracterizar la Ilustración y las revoluciones liberales del siglo XVIII y XIX.", indicators: ["Sintetiza las nociones ilustradas de soberanía popular y división de poderes.", "Examina la Declaración de los Derechos del Hombre y del Ciudadano."] },
+                { id: "OA8_11", axis: "Geografía", code: "OA 11", text: "Analizar los impactos de la globalización en el territorio local y la conectividad regional.", indicators: ["Identifica flujos de información, bienes y migración en la era digital.", "Reflexiona sobre cómo la globalización transforma los hábitos locales."] },
+                { id: "OA8_18", axis: "Formación Ciudadana", code: "OA 18", text: "Evaluar el impacto de la participación ciudadana en el fortalecimiento de la democracia.", indicators: ["Diferencia canales formales e informales de participación cívica.", "Diseña proyectos de intervención social para la comunidad educativa."] }
+            ]
+        };
+
+        let activeSelectedOAs = [];
+        let activeAxisFilter = 'ALL';
+
+        function handleCourseChange() {
+            const c1 = document.getElementById('course1').value;
+            const c2 = document.getElementById('course2').value;
+            const notice = document.getElementById('multigradeNotice');
+
+            if (c1 && c2 && c1 !== c2) {
+                notice.classList.remove('hidden');
+            } else {
+                notice.classList.add('hidden');
+            }
+
+            renderOAList();
+        }
+
+        function filterOaByAxis(axis) {
+            activeAxisFilter = axis;
+            document.querySelectorAll('.axis-tab').forEach(tab => {
+                if (tab.dataset.axis === axis) {
+                    tab.classList.add('active-tab', 'bg-white', 'shadow-sm', 'text-slate-800');
+                    tab.classList.remove('text-slate-600');
+                } else {
+                    tab.classList.remove('active-tab', 'bg-white', 'shadow-sm', 'text-slate-800');
+                    tab.classList.add('text-slate-600');
+                }
+            });
+            renderOAList();
+        }
+
+        function renderOAList() {
+            const container = document.getElementById('oaListContainer');
+            const c1 = document.getElementById('course1').value;
+            const c2 = document.getElementById('course2').value;
+
+            if (!c1 && !c2) {
+                container.innerHTML = `<div class="text-center py-8 text-slate-400 text-xs italic">Selecciona uno o dos cursos para desplegar los Objetivos de Aprendizaje.</div>`;
+                return;
+            }
+
+            let available = [];
+            if (c1 && MINEDUC_OA_DATABASE[c1]) {
+                available = available.concat(MINEDUC_OA_DATABASE[c1].map(item => ({ ...item, courseLabel: `${c1}° Básico` })));
+            }
+            if (c2 && MINEDUC_OA_DATABASE[c2] && c1 !== c2) {
+                available = available.concat(MINEDUC_OA_DATABASE[c2].map(item => ({ ...item, courseLabel: `${c2}° Básico` })));
+            }
+
+            if (activeAxisFilter !== 'ALL') {
+                available = available.filter(oa => oa.axis === activeAxisFilter);
+            }
+
+            if (available.length === 0) {
+                container.innerHTML = `<div class="text-center py-6 text-slate-400 text-xs italic">No hay Objetivos para el eje seleccionado.</div>`;
+                return;
+            }
+
+            container.innerHTML = available.map(oa => {
+                const isSelected = activeSelectedOAs.some(s => s.id === oa.id);
+                return `
+                    <label class="flex items-start space-x-2.5 p-2.5 rounded-lg border ${isSelected ? 'border-indigo-500 bg-indigo-50/50' : 'border-slate-200 hover:bg-slate-50'} transition cursor-pointer">
+                        <input type="checkbox" onchange="toggleOaSelection('${oa.id}')" ${isSelected ? 'checked' : ''} class="mt-0.5 rounded text-indigo-600 focus:ring-indigo-500">
+                        <div class="text-xs">
+                            <div class="flex items-center gap-1.5 mb-0.5">
+                                <span class="font-bold text-indigo-800 bg-indigo-100 px-1.5 py-0.2 rounded text-[10px]">${oa.courseLabel}</span>
+                                <span class="font-bold text-slate-700">${oa.code}</span>
+                                <span class="text-[10px] text-slate-400">(${oa.axis})</span>
+                            </div>
+                            <p class="text-slate-700 leading-snug">${oa.text}</p>
+                        </div>
+                    </label>
+                `;
+            }).join('');
+        }
+
+        function toggleOaSelection(id) {
+            const c1 = document.getElementById('course1').value;
+            const c2 = document.getElementById('course2').value;
+            
+            let allAvailable = [];
+            if (c1 && MINEDUC_OA_DATABASE[c1]) allAvailable = allAvailable.concat(MINEDUC_OA_DATABASE[c1].map(item => ({ ...item, courseLabel: `${c1}° Básico` })));
+            if (c2 && MINEDUC_OA_DATABASE[c2] && c1 !== c2) allAvailable = allAvailable.concat(MINEDUC_OA_DATABASE[c2].map(item => ({ ...item, courseLabel: `${c2}° Básico` })));
+
+            const targetObj = allAvailable.find(o => o.id === id);
+            if (!targetObj) return;
+
+            const index = activeSelectedOAs.findIndex(item => item.id === id);
+            if (index > -1) {
+                activeSelectedOAs.splice(index, 1);
+            } else {
+                activeSelectedOAs.push(targetObj);
+            }
+
+            document.getElementById('selectedCountBadge').textContent = `${activeSelectedOAs.length} selec.`;
+            renderOAList();
+        }
+
+        // GENERADOR DE CONTENIDO COMPLETO DE LA CLASE
+        function generateDetailedPlan() {
+            const school = document.getElementById('schoolName').value || 'Escuela Básica San Martín';
+            const teacher = document.getElementById('teacherName').value || 'Prof. José Silva Vergara';
+            const c1 = document.getElementById('course1').value;
+            const c2 = document.getElementById('course2').value;
+            const duration = parseInt(document.getElementById('classDuration').value) || 90;
+            const dateVal = document.getElementById('classDate').value || new Date().toISOString().split('T')[0];
+            const unit = document.getElementById('unitTitle').value || 'Unidad Didáctica de Aprendizaje Integrado';
+
+            if (!c1 && !c2) {
+                alert('Por favor, selecciona al menos un curso escolar.');
+                return;
+            }
+
+            if (activeSelectedOAs.length === 0) {
+                alert('Debes seleccionar al menos un Objetivo de Aprendizaje (OA) para generar la clase.');
+                return;
+            }
+
+            const isMultigrade = Boolean(c1 && c2 && c1 !== c2);
+
+            // Cargar Encabezado
+            document.getElementById('prevSchool').textContent = school;
+            document.getElementById('prevTeacher').textContent = teacher;
+            document.getElementById('prevCourses').textContent = isMultigrade 
+                ? `${c1}° y ${c2}° Año Básico (Comunidad Unificada)` 
+                : `${c1}° Año Básico`;
+            document.getElementById('prevDate').textContent = dateVal;
+            document.getElementById('prevDuration').textContent = `${duration} min`;
+            document.getElementById('prevUnit').textContent = unit;
+
+            // Lista OAs
+            document.getElementById('prevOaList').innerHTML = activeSelectedOAs.map(oa => `
+                <div class="bg-slate-50 p-2 rounded border border-slate-200">
+                    <span class="font-bold text-indigo-800">${oa.courseLabel} - ${oa.code} (${oa.axis}):</span> ${oa.text}
+                </div>
+            `).join('');
+
+            // Lista Indicadores de Evaluación
+            let allIndicatorsHtml = '';
+            activeSelectedOAs.forEach(oa => {
+                if (oa.indicators) {
+                    oa.indicators.forEach(ind => {
+                        allIndicatorsHtml += `<div class="text-[11px] text-slate-700 py-0.5">• <span class="font-semibold text-slate-900">[${oa.code}]:</span> ${ind}</div>`;
+                    });
+                }
+            });
+            document.getElementById('prevIndicatorsList').innerHTML = allIndicatorsHtml;
+
+            // Tiempos
+            const inicioTime = Math.round(duration * 0.15);
+            const desarrolloTime = Math.round(duration * 0.70);
+            const cierreTime = duration - inicioTime - desarrolloTime;
+
+            document.getElementById('timeInicioLabel').textContent = `${inicioTime} min`;
+            document.getElementById('timeDesarrolloLabel').textContent = `${desarrolloTime} min`;
+            document.getElementById('timeCierreLabel').textContent = `${cierreTime} min`;
+
+            // Objetivo Integrado
+            const topicsCombined = activeSelectedOAs.map(o => o.text.split(',')[0].toLowerCase()).join(' articulado con ');
+            const synthesizedObjective = isMultigrade 
+                ? `Investigar, analizar y argumentar comunitariamente sobre ${topicsCombined}, integrando saberes de ambos niveles mediante indagación colaborativa, lectura de fuentes e intercambio reflexivo.`
+                : `Analizar y comprender ${topicsCombined}, utilizando fuentes primarias/secundarias y trabajando de forma cooperativa para comunicar hallazgos de manera crítica.`;
+
+            document.getElementById('targetObjectiveInput').value = synthesizedObjective;
+
+            // Momento Inicio
+            const inicioText = isMultigrade
+                ? `1. Desafío y Motivación Comunitario de Entrada (${inicioTime} min):\n` +
+                  `   - El docente reúne a la comunidad de aprendizaje (estudiantes de ambos niveles) en semicírculo para iniciar la sesión.\n` +
+                  `   - Presentación de una interrogante guía en la pizarra: "¿Cómo influyen las decisiones del pasado y la geografía en nuestra convivencia actual?".\n` +
+                  `   - Activación de aprendizajes previos mediante la dinámica 'Lluvia de Ideas en Parejas Mixtas' (un estudiante de cada nivel dialoga durante 3 minutos y comparte una reflexión inicial).\n\n` +
+                  `2. Enmarque Didáctico Unificado:\n` +
+                  `   - Lectura compartida del Objetivo Integrado de la Clase.\n` +
+                  `   - Explicación de los roles cooperativos y la meta colectiva del taller.`
+                : `1. Inicio y Activación de Aprendizajes Previos (${inicioTime} min):\n` +
+                  `   - Saludo inicial y presentación de una imagen detonante o problema histórico en la pizarra.\n` +
+                  `   - Diálogo guiado para rescatar los conceptos estudiados en sesiones previas.\n\n` +
+                  `2. Enmarque Pedagógico:\n` +
+                  `   - Explicación del Objetivo Integrado de la Clase y de los indicadores con que se evaluará el desempeño.`;
+
+            document.getElementById('inicioContentInput').value = inicioText;
+
+            // Momento Desarrollo (Con fuente de lectura íntegra)
+            const desarrolloText = isMultigrade
+                ? `ACTIVIDAD COMUNITARIA INTEGRADA: "Taller de Indagación Histórico-Social Colectiva" (${desarrolloTime} min)\n\n` +
+                  `ORGANIZACIÓN DE LA COMUNIDAD:\n` +
+                  `Los estudiantes integran Equipos Cooperativos Mixtos de 4 integrantes (alumnos de ambos niveles). Roles asignados: 1. Lector/Líder de fuente, 2. Cartógrafo/Sintetizador, 3. Relator Comunitario, 4. Moderador de Convivencia.\n\n` +
+                  `--------------------------------------------------------------------------------\n` +
+                  `RECURSO Y FUENTE DIDÁCTICA ÍNTEGRA DE LECTURA:\n` +
+                  `"TESTIMONIO DE VIDA, TERRITORIO Y CIUDADANÍA EN NUESTRA HISTORIA"\n\n` +
+                  `"En el territorio que hoy habitamos, las comunidades humanas han debido adaptarse a los constantes desafíos del relieve, el clima y los cambios sociales. En tiempos pasados, la vida cotidiana estaba profundamente ligada al respeto por la tierra y al trabajo en equipo. Cuando las primeras familias se establecieron en los valles y zonas costeras, comprendieron que la colaboración era indispensable para organizar los cultivos, construir viviendas seguras y fijar reglas de convivencia justa.\n\n` +
+                  `Con el paso de los siglos y la consolidación de nuestra República, la sociedad buscó organizar sus leyes e instituciones mediante Constituciones para asegurar la libertad y el bienestar de todos sus habitantes. Hoy en día, tanto los saberes de nuestros pueblos originarios como los valores de la democracia nos recuerdan que una comunidad prospera cuando respeta la diversidad cultural, cuida sus recursos naturales y garantiza el ejercicio activo de los derechos humanos."\n` +
+                  `--------------------------------------------------------------------------------\n\n` +
+                  `GUÍA PASO A PASO PARA EL EQUIPO MIXTO:\n\n` +
+                  `Paso 1: Lectura Compartida (10 min)\n` +
+                  `El equipo realiza una lectura compartida del texto fuente. El integrante de nivel superior brinda apoyo en la comprensión léxica.\n\n` +
+                  `Paso 2: Cuestionario de Análisis Comunitario (20 min) - Responder en la guía de trabajo:\n` +
+                  `  1. ¿Qué elementos geográficos o climáticos condicionaron la vida de las comunidades según el texto?\n` +
+                  `  2. Identifica dos valores de convivencia y democracia que sigan vigentes en la actualidad.\n` +
+                  `  3. Explica con tus palabras de qué forma el trabajo en equipo del pasado contribuye a fortalecer nuestra escuela en el presente.\n` +
+                  `  4. Elabora un mapa mental o dibujo esquemático que sintetice la relación entre sociedad, territorio y derechos.\n\n` +
+                  `Paso 3: Creación de la Lámina de Síntesis Comunitario (15 min):\n` +
+                  `Cada equipo confecciona un cartel o lámina con 3 conclusiones principales e ilustraciones representativas.\n\n` +
+                  `Paso 4: Plenario y Exposición Colectiva (15 min):\n` +
+                  `Los relatores presentan sus conclusiones al resto de la comunidad, recibiendo retroalimentación docente.`
+                : `ACTIVIDAD DIDÁCTICA ACTIVA: "Laboratorio Indagatorio de Fuentes e Identidad" (${desarrolloTime} min)\n\n` +
+                  `ORGANIZACIÓN DE LA CLASE:\n` +
+                  `Trabajo en parejas cooperativas con asignación de tareas de lectura reflexiva e investigación.\n\n` +
+                  `--------------------------------------------------------------------------------\n` +
+                  `TEXTO DE LECTURA COMPLETO:\n` +
+                  `"LA SOCIEDAD, EL ESPACIO Y LA CONVIVENCIA EN EL TIEMPO"\n\n` +
+                  `"La historia demuestra que cada época ha buscado responder a interrogantes clave: ¿Cómo organizamos la vida común? ¿De qué manera nos adaptamos al espacio geográfico? Desde los primeros asentamientos hasta la conformación de la democracia moderna, el ser humano ha transformado el paisaje y redactado leyes para resguardar la justicia. Comprender nuestro pasado y el territorio nos permite ejercer una ciudadanía consciente y comprometida con el desarrollo sostenible de nuestro país."\n` +
+                  `--------------------------------------------------------------------------------\n\n` +
+                  `PREGUNTAS DE TRABAJO:\n` +
+                  `  1. Resume la idea principal del texto y conéctala con el Objetivo de Aprendizaje.\n` +
+                  `  2. ¿Cómo influye el medio geográfico en la economía de una sociedad?\n` +
+                  `  3. Propón dos acciones concretas para promover la ciudadanía activa en tu comunidad escolar.`;
+
+            document.getElementById('desarrolloContentInput').value = desarrolloText;
+
+            // Momento Cierre
+            const cierreText = isMultigrade
+                ? `1. Plenario y Metacognición Comunitario (${cierreTime} min):\n` +
+                  `   - Estudiantes y docente forman un círculo de reflexión.\n` +
+                  `   - Pregunta clave: "¿Qué aprendizaje nuevo me aportó trabajar con mi compañero(a) del otro nivel hoy?".\n\n` +
+                  `2. Ticket de Salida Colectivo:\n` +
+                  `   - Cada equipo entrega una tarjeta con una frase síntesis de la clase.`
+                : `1. Consolidador Didáctico (${cierreTime} min):\n` +
+                  `   - Síntesis colectiva en la pizarra con las 3 ideas principales de la sesión.\n` +
+                  `2. Ticket de Salida Individual:\n` +
+                  `   - Responder brevemente: "¿Por qué es importante comprender la historia y la geografía para nuestra convivencia diaria?".`;
+
+            document.getElementById('cierreContentInput').value = cierreText;
+
+            // Evaluación
+            document.getElementById('evalTypeInput').value = isMultigrade 
+                ? "Evaluación Formativa con Rúbrica de Desempeño Comunitario" 
+                : "Evaluación Formativa con Escala de Apreciación Indagatoria";
+
+            document.getElementById('evalIndicatorInput').value = activeSelectedOAs[0]?.indicators?.[0] || "Analiza fuentes históricas y colabora activamente en el trabajo didáctico.";
+
+            // Tabla de Rúbrica en Formato Texto
+            const rubricTableText = 
+                `TABLA DE EVALUACIÓN Y RÚBRICA FORMATIVA:\n` +
+                `----------------------------------------------------------------------------------------\n` +
+                `CRITERIO / INDICADOR           | LOGRADO (3p)          | EN PROCESO (2p)      | NO LOGRADO (1p)\n` +
+                `----------------------------------------------------------------------------------------\n` +
+                `1. Análisis de Fuentes         | Extrae ideas clave    | Extrae información    | Presenta dificultad\n` +
+                `                               | con precisión.        | parcial sin síntesis.| para comprender.\n` +
+                `2. Relación Geografía/Historia | Conecta el territorio | Conecta elementos    | Muestra poca o nula\n` +
+                `                               | con la sociedad.      | de manera aislada.   | relación.\n` +
+                `3. Trabajo en Comunidad        | Colabora activamente  | Participa solo cuando| No se integra al\n` +
+                `                               | y respeta opiniones.  | se le requiere.      | equipo de trabajo.\n` +
+                `4. Exposición y Comunicación   | Comunica ideas claras | Presenta respuestas  | Dificultad para\n` +
+                `                               | y argumentadas.       | breves o incompletas.| expresar sus ideas.\n` +
+                `----------------------------------------------------------------------------------------`;
+
+            document.getElementById('evalRubricInput').value = rubricTableText;
+
+            // DUA
+            document.getElementById('duaRepresentationInput').value = 
+                "• Lectura guiada en voz alta con apoyo de tipografía clara en las guías printed.\n" +
+                "• Uso de esquemas conceptuales en la pizarra y mapas ilustrados para apoyar la comprensión visual.";
+
+            document.getElementById('duaActionInput').value = 
+                "• Modalidades variadas de respuesta: texto escrito, diagramas ilustrados o vocería oral en el plenario.\n" +
+                "• Asignación flexible de roles según las fortalezas individuales en cada equipo mixtos.";
+
+            document.getElementById('duaEngagementInput').value = 
+                "• Modalidad de aprendizaje cooperativo que fortalece el sentido de pertenencia comunitarios.\n" +
+                "• Desafíos prácticos con metas compartidas y retroalimentación positiva contínua.";
+
+            // Cambiar estados visuales
+            document.getElementById('placeholderState').classList.add('hidden');
+            document.getElementById('actualPlanForm').classList.remove('hidden');
+        }
+
+        // FUNCIÓN PARA GENERAR MUESTRA/EJEMPLO DE EVALUACIÓN EN PESTAÑA NUEVA
+        function openEvaluationSampleWindow() {
+            const school = document.getElementById('prevSchool').textContent || 'Escuela Básica San Martín';
+            const teacher = document.getElementById('prevTeacher').textContent || 'Prof. José Silva Vergara';
+            const courses = document.getElementById('prevCourses').textContent || 'Historia, Geografía y Cs. Sociales';
+            const targetObj = document.getElementById('targetObjectiveInput').value || 'Objetivo de la clase';
+            const evalType = document.getElementById('evalTypeInput').value;
+
+            const newWindow = window.open('', '_blank');
+            if (!newWindow) {
+                alert('Por favor, permite las ventanas emergentes en tu navegador para ver el ejemplo de evaluación.');
+                return;
+            }
+
+            const htmlContent = `
+            <!DOCTYPE html>
+            <html lang="es">
+            <head>
+                <meta charset="UTF-8">
+                <title>Ejemplo de Instrumento de Evaluación - Historia</title>
+                <script src="https://cdn.tailwindcss.com"><\/script>
+                <link href="https://fonts.googleapis.com/css2?family=Arial&display=swap" rel="stylesheet">
+                <style>
+                    body { font-family: Arial, sans-serif; }
+                    .text-justify { text-align: justify; }
+                    @media print {
+                        .no-print { display: none !important; }
+                        body { padding: 0; margin: 0; }
+                    }
+                </style>
+            </head>
+            <body class="bg-slate-100 p-6 text-slate-900">
+                
+                <!-- BARRA DE ACCIÓN SUPERIOR NO IMPRIMIBLE -->
+                <div class="no-print max-w-4xl mx-auto mb-6 flex justify-between items-center bg-indigo-900 text-white p-4 rounded-xl shadow">
+                    <div>
+                        <h2 class="font-bold text-sm sm:text-base">Ejemplo de Instrumento de Evaluación Generado</h2>
+                        <p class="text-xs text-indigo-200">Formato listo para aplicar, imprimir o guardar</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="window.print()" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-lg shadow transition">
+                            🖨️ Imprimir Instrumento
+                        </button>
+                        <button onclick="window.close()" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white font-semibold text-xs rounded-lg transition">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- PLANILLA IMPRIMIBLE EN FORMATO CARTA ARIAL 12 -->
+                <div class="max-w-4xl mx-auto bg-white p-10 rounded-xl shadow-md border border-slate-300 text-[12pt] leading-relaxed">
+                    
+                    <!-- ENCABEZADO OFICIAL -->
+                    <div class="border-b-2 border-slate-800 pb-4 mb-6">
+                        <h1 class="text-center font-bold text-lg uppercase tracking-wide">INSTRUMENTO DE EVALUACIÓN FORMATIVA</h1>
+                        <p class="text-center font-bold text-sm text-slate-700">Planificador Didáctico Historia</p>
+                    </div>
+
+                    <!-- IDENTIFICACIÓN -->
+                    <table class="w-full border-collapse border border-slate-400 mb-6 text-[11pt]">
+                        <tr>
+                            <td class="border border-slate-400 p-2 font-bold bg-slate-100 w-1/4">Establecimiento:</td>
+                            <td class="border border-slate-400 p-2 w-1/4">${school}</td>
+                            <td class="border border-slate-400 p-2 font-bold bg-slate-100 w-1/4">Fecha:</td>
+                            <td class="border border-slate-400 p-2 w-1/4">___ / ___ / 2026</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-slate-400 p-2 font-bold bg-slate-100">Docente:</td>
+                            <td class="border border-slate-400 p-2">${teacher}</td>
+                            <td class="border border-slate-400 p-2 font-bold bg-slate-100">Curso(s):</td>
+                            <td class="border border-slate-400 p-2 font-bold">${courses}</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-slate-400 p-2 font-bold bg-slate-100">Estudiante:</td>
+                            <td class="border border-slate-400 p-2" colspan="3">____________________________________________________</td>
+                        </tr>
+                    </table>
+
+                    <!-- OBJETIVO DE LA CLASE -->
+                    <div class="mb-6 p-3 border border-slate-300 bg-slate-50 rounded">
+                        <p class="font-bold text-[11pt] text-slate-800 mb-1">OBJETIVO EVALUADO:</p>
+                        <p class="text-justify text-[11pt]">${targetObj}</p>
+                    </div>
+
+                    <!-- INSTRUCCIONES -->
+                    <div class="mb-6 text-justify">
+                        <p class="font-bold text-[11pt] mb-1">INSTRUCCIONES GENERALES:</p>
+                        <p class="text-[11pt]">Lea atentamente cada uno de los criterios a evaluar. Este instrumento valora el trabajo reflexivo, la comprensión de fuentes histórico-geográficas y la participación colaborativa en el aula.</p>
+                    </div>
+
+                    <!-- TABLA DE RÚBRICA / RÚBRICA DETALLADA -->
+                    <h3 class="font-bold text-[12pt] mb-3 border-b border-slate-400 pb-1">PAUTA Y RÚBRICA DE DESEMPEÑO FORMATIVO</h3>
+                    
+                    <table class="w-full border-collapse border border-slate-400 text-[10pt] mb-8">
+                        <thead>
+                            <tr class="bg-slate-200">
+                                <th class="border border-slate-400 p-2 text-left w-1/4">Criterio de Evaluación</th>
+                                <th class="border border-slate-400 p-2 text-left w-1/4">Logrado (3 pts)</th>
+                                <th class="border border-slate-400 p-2 text-left w-1/4">En Proceso (2 pts)</th>
+                                <th class="border border-slate-400 p-2 text-left w-1/4">Por Lograr (1 pt)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border border-slate-400 p-2 font-bold">1. Lectura y Análisis de Fuentes</td>
+                                <td class="border border-slate-400 p-2 text-justify">Identifica de manera precisa las ideas centrales y el contexto de la fuente escrita.</td>
+                                <td class="border border-slate-400 p-2 text-justify">Comprende la fuente en forma parcial, requiriendo orientación ocasional.</td>
+                                <td class="border border-slate-400 p-2 text-justify">Muestra dificultad para extraer información relevante del texto.</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-slate-400 p-2 font-bold">2. Conexión Geográfica e Histórica</td>
+                                <td class="border border-slate-400 p-2 text-justify">Relaciona críticamente las dinámicas del espacio con el desarrollo de la sociedad.</td>
+                                <td class="border border-slate-400 p-2 text-justify">Menciona conexiones sencillas entre territorio e historia.</td>
+                                <td class="border border-slate-400 p-2 text-justify">Presenta respuestas descontextualizadas o sin fundamentación.</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-slate-400 p-2 font-bold">3. Trabajo Colaborativo en Comunidad</td>
+                                <td class="border border-slate-400 p-2 text-justify">Cumple activamente su rol y promueve el diálogo respetuoso con sus pares.</td>
+                                <td class="border border-slate-400 p-2 text-justify">Participa en el grupo pero depende de sus compañeros para avanzar.</td>
+                                <td class="border border-slate-400 p-2 text-justify">Muestra escasa integración al equipo de trabajo.</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-slate-400 p-2 font-bold">4. Exposición y Fundamentación</td>
+                                <td class="border border-slate-400 p-2 text-justify">Expresa conclusiones claras y fundamentadas durante la síntesis.</td>
+                                <td class="border border-slate-400 p-2 text-justify">Comunica sus ideas de forma breve o con argumentos incompletos.</td>
+                                <td class="border border-slate-400 p-2 text-justify">Presenta dificultades para estructurar una respuesta coherente.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- SECCIÓN DE OBSERVACIONES -->
+                    <div class="border border-slate-400 p-4 rounded mb-8 min-h-[100px]">
+                        <p class="font-bold text-[11pt] mb-2">OBSERVACIONES Y RETROALIMENTACIÓN DOCENTE:</p>
+                        <p class="text-slate-300 text-xs">____________________________________________________________________________________________________</p>
+                        <p class="text-slate-300 text-xs mt-2">____________________________________________________________________________________________________</p>
+                    </div>
+
+                    <!-- FIRMA FOOTER -->
+                    <div class="mt-12 text-center border-t border-slate-300 pt-3 text-[10pt] text-slate-600">
+                        Herramienta desarrollada por el profesor José Silva Vergara
+                    </div>
+
+                </div>
+            </body>
+            </html>
+            `;
+
+            newWindow.document.write(htmlContent);
+            newWindow.document.close();
+        }
+
+        // EXPORTACIÓN A WORD CON FORMANDO ARIAL 12, CARTA Y JUSTIFICADO
+        function exportToWordDocx() {
+            const docxLib = window.docx;
+            if (!docxLib) {
+                alert('La librería docx.js aún se está cargando. Intenta de nuevo en un par de segundos.');
+                return;
+            }
+
+            const { Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, HeadingLevel, AlignmentType } = docxLib;
+
+            // Obtener valores
+            const school = document.getElementById('prevSchool').textContent;
+            const teacher = document.getElementById('prevTeacher').textContent;
+            const courses = document.getElementById('prevCourses').textContent;
+            const dateVal = document.getElementById('prevDate').textContent;
+            const timeVal = document.getElementById('prevDuration').textContent;
+            const unitVal = document.getElementById('prevUnit').textContent;
+
+            const targetObj = document.getElementById('targetObjectiveInput').value;
+            const inicio = document.getElementById('inicioContentInput').value;
+            const desarrollo = document.getElementById('desarrolloContentInput').value;
+            const cierre = document.getElementById('cierreContentInput').value;
+
+            const evalType = document.getElementById('evalTypeInput').value;
+            const evalInd = document.getElementById('evalIndicatorInput').value;
+            const evalRubric = document.getElementById('evalRubricInput').value;
+
+            const duaRep = document.getElementById('duaRepresentationInput').value;
+            const duaAct = document.getElementById('duaActionInput').value;
+            const duaImp = document.getElementById('duaEngagementInput').value;
+
+            const cellPadding = { top: 120, bottom: 120, left: 140, right: 140 };
+
+            // Helper para convertir textos multilínea a párrafos en Arial 12 con alineación JUSTIFICADA
+            const makeParagraphsJustified = (str) => {
+                return str.split('\n').map(line => new Paragraph({
+                    children: [new TextRun({ text: line, font: "Arial", size: 24 })], // size 24pt = 12pt real en docx
+                    alignment: AlignmentType.JUSTIFIED,
+                    spacing: { after: 80 }
+                }));
+            };
+
+            const doc = new Document({
+                sections: [{
+                    properties: {
+                        page: {
+                            // Márgenes de 1 pulgada (1440 twips) - Tamaño Carta (Letter)
+                            margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 },
+                            size: { width: 12240, height: 15840 } // Letter
+                        }
+                    },
+                    children: [
+                        // ENCABEZADO OFICIAL EXACTO: Planificador Didáctico Historia
+                        new Paragraph({
+                            children: [new TextRun({ text: "PLANIFICADOR DIDÁCTICO HISTORIA", bold: true, font: "Arial", size: 28 })],
+                            alignment: AlignmentType.CENTER,
+                            spacing: { after: 100 }
+                        }),
+                        new Paragraph({
+                            children: [new TextRun({ text: "Diseño para Aula Regular y Comunidad de Aprendizaje Multigrado", font: "Arial", size: 22, italic: true })],
+                            alignment: AlignmentType.CENTER,
+                            spacing: { after: 250 }
+                        }),
+
+                        // TABLA DE IDENTIFICACIÓN
+                        new Table({
+                            width: { size: 100, type: WidthType.PERCENTAGE },
+                            rows: [
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Establecimiento:", bold: true, font: "Arial", size: 24 })] })], padding: cellPadding, width: { size: 25, type: WidthType.PERCENTAGE } }),
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: school, font: "Arial", size: 24 })] })], padding: cellPadding, width: { size: 35, type: WidthType.PERCENTAGE } }),
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Fecha:", bold: true, font: "Arial", size: 24 })] })], padding: cellPadding, width: { size: 15, type: WidthType.PERCENTAGE } }),
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: dateVal, font: "Arial", size: 24 })] })], padding: cellPadding, width: { size: 25, type: WidthType.PERCENTAGE } }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Docente:", bold: true, font: "Arial", size: 24 })] })], padding: cellPadding }),
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: teacher, font: "Arial", size: 24 })] })], padding: cellPadding }),
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Duración:", bold: true, font: "Arial", size: 24 })] })], padding: cellPadding }),
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: timeVal, font: "Arial", size: 24 })] })], padding: cellPadding }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Curso(s):", bold: true, font: "Arial", size: 24 })] })], padding: cellPadding }),
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: courses, font: "Arial", size: 24, bold: true })] })], padding: cellPadding }),
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Unidad:", bold: true, font: "Arial", size: 24 })] })], padding: cellPadding }),
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: unitVal, font: "Arial", size: 24 })] })], padding: cellPadding }),
+                                    ]
+                                })
+                            ]
+                        }),
+
+                        new Paragraph({ text: "", spacing: { after: 150 } }),
+
+                        // 1. SECCIÓN OBJETIVOS DE APRENDIZAJE
+                        new Paragraph({
+                            children: [new TextRun({ text: "1. OBJETIVOS DE APRENDIZAJE SELECCIONADOS", bold: true, font: "Arial", size: 24 })],
+                            spacing: { before: 150, after: 100 }
+                        }),
+                        ...activeSelectedOAs.map(oa => new Paragraph({
+                            children: [
+                                new TextRun({ text: `• [${oa.courseLabel} - ${oa.code} (${oa.axis})]: `, bold: true, font: "Arial", size: 24 }),
+                                new TextRun({ text: oa.text, font: "Arial", size: 24 })
+                            ],
+                            alignment: AlignmentType.JUSTIFIED,
+                            spacing: { after: 80 }
+                        })),
+
+                        // INDICADORES DE EVALUACIÓN ASOCIADOS
+                        new Paragraph({
+                            children: [new TextRun({ text: "INDICADORES DE EVALUACIÓN OFICIALES CORRESPONDIENTES:", bold: true, font: "Arial", size: 22 })],
+                            spacing: { before: 100, after: 80 }
+                        }),
+                        ...activeSelectedOAs.flatMap(oa => (oa.indicators || []).map(ind => new Paragraph({
+                            children: [
+                                new TextRun({ text: `  - [${oa.code}]: `, bold: true, font: "Arial", size: 22 }),
+                                new TextRun({ text: ind, font: "Arial", size: 22 })
+                            ],
+                            alignment: AlignmentType.JUSTIFIED,
+                            spacing: { after: 60 }
+                        }))),
+
+                        new Paragraph({ text: "", spacing: { after: 150 } }),
+
+                        // 2. OBJETIVO SINTETIZADO
+                        new Paragraph({
+                            children: [new TextRun({ text: "2. OBJETIVO SINTETIZADO DE LA CLASE", bold: true, font: "Arial", size: 24 })],
+                            spacing: { before: 150, after: 100 }
+                        }),
+                        new Table({
+                            width: { size: 100, type: WidthType.PERCENTAGE },
+                            rows: [
+                                new TableRow({
+                                    children: [
+                                        new TableCell({
+                                            children: [new Paragraph({
+                                                children: [new TextRun({ text: targetObj, font: "Arial", size: 24, bold: true })],
+                                                alignment: AlignmentType.JUSTIFIED
+                                            })],
+                                            padding: cellPadding,
+                                            shading: { fill: "F1F5F9" }
+                                        })
+                                    ]
+                                })
+                            ]
+                        }),
+
+                        new Paragraph({ text: "", spacing: { after: 150 } }),
+
+                        // 3. SECUENCIA DIDÁCTICA DETALLADA
+                        new Paragraph({
+                            children: [new TextRun({ text: "3. DESARROLLO DIDÁCTICO Y FUENTES DIVERSAS", bold: true, font: "Arial", size: 24 })],
+                            spacing: { before: 150, after: 100 }
+                        }),
+                        new Table({
+                            width: { size: 100, type: WidthType.PERCENTAGE },
+                            rows: [
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Momento", bold: true, font: "Arial", size: 24 })] })], width: { size: 20, type: WidthType.PERCENTAGE }, padding: cellPadding, shading: { fill: "E2E8F0" } }),
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Actividad Detallada y Fuentes Completas", bold: true, font: "Arial", size: 24 })] })], width: { size: 80, type: WidthType.PERCENTAGE }, padding: cellPadding, shading: { fill: "E2E8F0" } }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "INICIO", bold: true, font: "Arial", size: 24 })] })], padding: cellPadding }),
+                                        new TableCell({ children: makeParagraphsJustified(inicio), padding: cellPadding }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "DESARROLLO\n(Con fuentes e instrucciones completas)", bold: true, font: "Arial", size: 24 })] })], padding: cellPadding }),
+                                        new TableCell({ children: makeParagraphsJustified(desarrollo), padding: cellPadding }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "CIERRE", bold: true, font: "Arial", size: 24 })] })], padding: cellPadding }),
+                                        new TableCell({ children: makeParagraphsJustified(cierre), padding: cellPadding }),
+                                    ]
+                                })
+                            ]
+                        }),
+
+                        new Paragraph({ text: "", spacing: { after: 150 } }),
+
+                        // 4. EVALUACIÓN Y TABLA DE RÚBRICA
+                        new Paragraph({
+                            children: [new TextRun({ text: "4. EVALUACIÓN FORMATIVA Y DIVERSIFICACIÓN (DUA)", bold: true, font: "Arial", size: 24 })],
+                            spacing: { before: 150, after: 100 }
+                        }),
+                        new Table({
+                            width: { size: 100, type: WidthType.PERCENTAGE },
+                            rows: [
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Tipo e Instrumento:", bold: true, font: "Arial", size: 24 })] })], padding: cellPadding, width: { size: 30, type: WidthType.PERCENTAGE } }),
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: evalType, font: "Arial", size: 24 })], alignment: AlignmentType.JUSTIFIED })], padding: cellPadding, width: { size: 70, type: WidthType.PERCENTAGE } }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Indicador Principal:", bold: true, font: "Arial", size: 24 })] })], padding: cellPadding }),
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: evalInd, font: "Arial", size: 24 })], alignment: AlignmentType.JUSTIFIED })], padding: cellPadding }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "Pauta de Cotejo / Rúbrica:", bold: true, font: "Arial", size: 24 })] })], padding: cellPadding }),
+                                        new TableCell({ children: makeParagraphsJustified(evalRubric), padding: cellPadding }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "DUA - Representación:", bold: true, font: "Arial", size: 24 })] })], padding: cellPadding }),
+                                        new TableCell({ children: makeParagraphsJustified(duaRep), padding: cellPadding }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "DUA - Acción y Expresión:", bold: true, font: "Arial", size: 24 })] })], padding: cellPadding }),
+                                        new TableCell({ children: makeParagraphsJustified(duaAct), padding: cellPadding }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ children: [new TextRun({ text: "DUA - Compromiso:", bold: true, font: "Arial", size: 24 })] })], padding: cellPadding }),
+                                        new TableCell({ children: makeParagraphsJustified(duaImp), padding: cellPadding }),
+                                    ]
+                                })
+                            ]
+                        }),
+
+                        new Paragraph({ text: "", spacing: { after: 300 } }),
+
+                        // PIE DE PÁGINA EN EL DOCUMENTO
+                        new Paragraph({
+                            children: [new TextRun({ text: "Herramienta desarrollada por el profesor José Silva Vergara", font: "Arial", size: 20, italic: true })],
+                            alignment: AlignmentType.CENTER,
+                            spacing: { before: 200 }
+                        })
+                    ]
+                }]
+            });
+
+            // Guardar documento
+            Packer.toBlob(doc).then(blob => {
+                const sanitizedCourses = courses.replace(/[^a-zA-Z0-9]/g, '_');
+                saveAs(blob, `Planificacion_Historia_${sanitizedCourses}.docx`);
+            }).catch(err => {
+                console.error("Error al exportar Word: ", err);
+                alert("Ocurrió un error al empaquetar el documento Word. Revisa la consola o intenta de nuevo.");
+            });
+        }
+    </script>
+</body>
+</html>
